@@ -29,8 +29,6 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
-  // EC2 / ALB / reverse proxies: honor X-Forwarded-* (needed for secure cookies + HTTPS)
-  app.set("trust proxy", Number(process.env.TRUST_PROXY_HOPS ?? 1));
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -56,9 +54,8 @@ async function startServer() {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
-  const host = process.env.HOST ?? "0.0.0.0";
-  server.listen(port, host, () => {
-    console.log(`Server listening on http://${host}:${port}/`);
+  server.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}/`);
   });
 }
 
