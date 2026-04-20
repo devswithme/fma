@@ -25,8 +25,7 @@ function isLocalDevHost(req: Request): boolean {
   const host = req.hostname || "";
   if (LOCAL_HOSTS.has(host)) return true;
   if (host === "[::1]") return true;
-  if (isIpAddress(host) && (host === "127.0.0.1" || host === "::1"))
-    return true;
+  if (isIpAddress(host)) return true;
   return false;
 }
 
